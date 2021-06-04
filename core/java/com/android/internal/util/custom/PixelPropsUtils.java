@@ -64,6 +64,10 @@ public class PixelPropsUtils {
             createGoogleSpoofProps("barbet", "Pixel 5a",
                     "google/barbet/barbet:14/UP1A.231105.001/10817346:user/release-keys");
 
+    private static final Map<String, Object> propsToChangePixelXL =
+            createGoogleSpoofProps("marlin", "Pixel XL",
+                    "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
+
     private static final Map<String, ArrayList<String>> propsToKeep;
 
     private static final String[] packagesToChangePixel8Pro = {
@@ -255,6 +259,8 @@ public class PixelPropsUtils {
             boolean isPixelDevice = Arrays.asList(pixelCodenames).contains(SystemProperties.get(DEVICE));
             if (isPixelDevice) {
                 return;
+            } else if (packageName.equals("com.google.android.apps.photos")) {
+                propsToChange.putAll(propsToChangePixelXL);
             } else if (!sNetflixModel.isEmpty() && packageName.equals(PACKAGE_NETFLIX)) {
                 dlog("Setting model to " + sNetflixModel + " for Netflix");
                 setBuildField("MODEL", sNetflixModel);
