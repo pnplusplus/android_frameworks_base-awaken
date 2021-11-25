@@ -251,5 +251,6 @@ public class SystemSettingsValidators {
                 });
         VALIDATORS.put(System.KEYGAURD_MEDIA_ART, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.FORCE_FULLSCREEN_CUTOUT_APPS, ANY_STRING_VALIDATOR);
+        VALIDATORS.put(System.FULLSCREEN_GESTURES, BOOLEAN_VALIDATOR);
     }
 }

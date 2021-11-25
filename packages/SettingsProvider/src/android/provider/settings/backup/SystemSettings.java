@@ -103,5 +103,6 @@ public class SystemSettings {
         Settings.System.NAVIGATION_BAR_INVERSE,
         Settings.System.NAVBAR_LAYOUT_VIEWS,
         Settings.System.KEYGAURD_MEDIA_ART,
+        Settings.System.FULLSCREEN_GESTURES,
     };
 }
