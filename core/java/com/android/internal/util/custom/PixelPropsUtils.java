@@ -58,6 +58,7 @@ public class PixelPropsUtils {
             "com.android.chrome",
             "com.android.vending",
             "com.breel.wallpapers20",
+            "com.microsoft.android.smsorganizer",
             "com.nothing.smartcenter",
             PACKAGE_NETFLIX
     };
@@ -137,9 +138,7 @@ public class PixelPropsUtils {
                 sIsFinsky = true;
                 return;
             } else {
-                if ((Arrays.asList(packagesToChangePixel7Pro).contains(packageName))
-                        || packageName.startsWith(SAMSUNG)
-                        || Arrays.asList(extraPackagesToChange).contains(packageName)) {
+                if ((Arrays.asList(packagesToChangePixel7Pro).contains(packageName))) {
                     propsToChange.putAll(propsToChangePixel7Pro);
                 } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixelXL);
