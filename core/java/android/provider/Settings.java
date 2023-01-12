@@ -11749,6 +11749,13 @@ public final class Settings {
         public static final String QS_SHOW_DATA_USAGE = "qs_show_data_usage";
 
         /**
+         * Whether to show an overlay in the bottom corner of the screen on copying stuff
+         * into the clipboard.
+         * @hide
+         */
+        public static final String SHOW_CLIPBOARD_OVERLAY = "show_clipboard_overlay";
+
+        /**
          * These entries are considered common between the personal and the managed profile,
          * since the managed profile doesn't get to change them.
          */
@@ -11836,6 +11843,12 @@ public final class Settings {
         public static void setLocationProviderEnabled(ContentResolver cr,
                 String provider, boolean enabled) {
         }
+
+        /** Whether to allow one finger quick settings expansion on the right side of the statusbar.
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
     }
 
     /**
