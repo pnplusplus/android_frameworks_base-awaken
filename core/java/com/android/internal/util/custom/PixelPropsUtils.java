@@ -38,11 +38,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class PixelPropsUtils {
 
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
+
+    private static final String[] sCertifiedProps =
+            Resources.getSystem().getStringArray(R.array.config_certifiedBuildProperties);
 
     private static final ComponentName GMS_ADD_ACCOUNT_ACTIVITY = ComponentName.unflattenFromString(
             "com.google.android.gms/.auth.uiflows.minutemaid.MinuteMaidActivity");
@@ -149,6 +154,24 @@ public class PixelPropsUtils {
             Arrays.asList(customGoogleCameraPackages).contains(packageName);
     }
 
+    private static String getBuildID(String fingerprint) {
+        Pattern pattern = Pattern.compile("([A-Za-z0-9]+\\.\\d+\\.\\d+\\.\\w+)");
+        Matcher matcher = pattern.matcher(fingerprint);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    private static String getDeviceName(String fingerprint) {
+        String[] parts = fingerprint.split("/");
+        if (parts.length >= 2) {
+            return parts[1];
+        }
+        return "";
+    }
+
     public static boolean setPropsForGms(String packageName) {
         if (packageName.equals("com.android.vending")) {
             sIsFinsky = true;
@@ -177,13 +200,20 @@ public class PixelPropsUtils {
                 }
                 if (was) return true;
 
-               dlog("Spoofing build for GMS");
-               setPropValue("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
-               setPropValue("PRODUCT", "marlin");
-               setPropValue("DEVICE", "marlin");
-               setPropValue("MODEL", "Pixel XL");
-               setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
-               return true;
+                if (sCertifiedProps == null || sCertifiedProps.length == 0) return true;
+                setPropValue("BRAND", sCertifiedProps[0]);
+                setPropValue("MANUFACTURER", sCertifiedProps[1]);
+                setPropValue("DEVICE", sCertifiedProps[3].isEmpty() ? getDeviceName(sCertifiedProps[6]) : sCertifiedProps[3]);
+                setPropValue("PRODUCT", sCertifiedProps[4].isEmpty() ? getDeviceName(sCertifiedProps[6]) : sCertifiedProps[4]);
+                setPropValue("MODEL", sCertifiedProps[5]);
+                setPropValue("FINGERPRINT", sCertifiedProps[6]);
+                if (sCertifiedProps[7].isEmpty()) {
+                     dlog("Skip spoofing first API level, because it is empty");
+                } else {
+                     setPropValue("FIRST_API_LEVEL", sCertifiedProps[7]);
+                }
+                setVersionFieldString("SECURITY_PATCH", sCertifiedProps[8]);
+                return true;
             }
         }
         return false;
@@ -264,6 +294,18 @@ public class PixelPropsUtils {
             field.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             Log.e(TAG, "Failed to set version field " + key, e);
+        }
+    }
+
+    private static void setVersionFieldString(String key, String value) {
+        try {
+            dlog("Setting prop " + key + " to " + value.toString());
+            Field field = Build.VERSION.class.getDeclaredField(key);
+            field.setAccessible(true);
+            field.set(null, value);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "Failed to spoof prop " + key, e);
         }
     }
 
