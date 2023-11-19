@@ -217,18 +217,15 @@ public class PixelPropsUtils {
                 if (was) return true;
 
                 dlog("Spoofing build for GMS");
-                // Alter build parameters to pixel 2 for avoiding hardware attestation enforcement
-                setBuildField("BRAND", "google");
-                setBuildField("PRODUCT", "walleye");
-                setBuildField("MODEL", "Pixel 2");
-                setBuildField("MANUFACTURER", "Google");
-                setBuildField("DEVICE", "walleye");
-                setBuildField("FINGERPRINT", "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys");
-                setBuildField("ID", "OPM1.171019.011");
+                // Alter build parameters to pixel for avoiding hardware attestation enforcement
+                setBuildField("PRODUCT", "sailfish");
+                setBuildField("MODEL", "Pixel");
+                setBuildField("DEVICE", "sailfish");
+                setBuildField("FINGERPRINT", "google/sailfish/sailfish:8.1.0/OPM2.171019.029/4657601:user/release-keys");
                 setBuildField("TYPE", "user");
                 setBuildField("TAGS", "release-keys");
                 setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.O_MR1);
-                setVersionField("SECURITY_PATCH", "2017-12-05");
+                setVersionField("SECURITY_PATCH", "2018-04-05");
                 return true;
             }
         }
